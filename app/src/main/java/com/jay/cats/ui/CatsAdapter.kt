@@ -3,19 +3,16 @@ package com.jay.cats.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.jay.cats.R
 import com.jay.cats.databinding.ItemCatBinding
 import com.jay.cats.model.Cat
 
-class CatsAdapter : RecyclerView.Adapter<CatsViewHolder>() {
+class CatsAdapter : PagingDataAdapter<Cat, CatsViewHolder>(REPO_COMPARATOR) {
 
-    private val items = mutableListOf<Cat>()
-
-    fun updateItems(items: List<Cat>) {
-        this.items.clear()
-        this.items.addAll(items)
-        notifyDataSetChanged()
+    override fun onBindViewHolder(holder: CatsViewHolder, position: Int) {
+        holder.bind(getItem(position) ?: return)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatsViewHolder {
@@ -25,14 +22,17 @@ class CatsAdapter : RecyclerView.Adapter<CatsViewHolder>() {
             parent,
             false
         )
-
-        return CatsViewHolder(binding = binding)
+        return CatsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CatsViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
+    companion object {
+        private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<Cat>() {
+            override fun areItemsTheSame(oldItem: Cat, newItem: Cat) =
+                oldItem.imageUrl == newItem.imageUrl
 
-    override fun getItemCount(): Int = items.size
+            override fun areContentsTheSame(oldItem: Cat, newItem: Cat) =
+                oldItem.imageUrl == newItem.imageUrl
+        }
+    }
 
 }

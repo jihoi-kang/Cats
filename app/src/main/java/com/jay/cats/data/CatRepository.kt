@@ -1,9 +1,11 @@
 package com.jay.cats.data
 
-import com.jay.cats.api.GetCatImagesResponse
+import androidx.paging.PagingData
+import com.jay.cats.model.Cat
+import kotlinx.coroutines.flow.Flow
 
 interface CatRepository {
 
-    suspend fun getCatImages(page: Int): List<GetCatImagesResponse>
+    fun letCatsFlow(): Flow<PagingData<Cat>>
 
 }

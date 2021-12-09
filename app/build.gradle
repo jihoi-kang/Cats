@@ -41,4 +41,6 @@ dependencies {
 
     implementation deps.hilt.android
     kapt deps.hilt.compiler
+
+    implementation "androidx.paging:paging-runtime-ktx:3.0.1"
 }
